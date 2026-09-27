@@ -410,7 +410,8 @@
       signOut,
       updateProfile,
       GoogleAuthProvider,
-      signInWithRedirect
+signInWithPopup
+    
     }
     from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
@@ -468,10 +469,13 @@
 
       try {
 
-        await signInWithRedirect(
-          auth,
-          googleProvider
-        );
+      
+      await signInWithPopup(
+  auth,
+  googleProvider
+);    
+        
+        
 
       } catch (error) {
 
