@@ -414,7 +414,12 @@ signInWithPopup
     
     }
     from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-
+import {
+  getFirestore,
+  doc,
+  setDoc
+}
+from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
     const firebaseConfig = {
 
@@ -445,11 +450,41 @@ signInWithPopup
 
     const auth =
       getAuth(app);
-
+  const db =
+  getFirestore(app);
 
     const googleProvider =
       new GoogleAuthProvider();
+  async function saveUserProfile(user) {
 
+  try {
+
+    await setDoc(
+      doc(db, "users", user.uid),
+      {
+        uid: user.uid,
+        name: user.displayName || "NovaShot User",
+        email: user.email || "",
+        photoURL: user.photoURL || "",
+        createdAt: new Date()
+      },
+      {
+        merge: true
+      }
+    );
+
+    console.log("User profile saved!");
+
+  } catch (error) {
+
+    console.error(
+      "Profile save error:",
+      error
+    );
+
+  }
+
+    }
 
     let signupMode = false;
 
@@ -750,7 +785,7 @@ signInWithPopup
 
     onAuthStateChanged(
       auth,
-      function(user) {
+      async function(user) {
 
         const authScreen =
           document.getElementById(
@@ -779,7 +814,7 @@ signInWithPopup
 
 
         if (user) {
-
+       await saveUserProfile(user);
           authScreen.classList.add(
             "hidden"
           );
