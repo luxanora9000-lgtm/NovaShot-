@@ -33,6 +33,68 @@
       padding: 10px;
     }
 
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 18px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    }
+
+    .auth-card {
+      margin-top: 50px;
+    }
+
+    .auth-card h2 {
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .auth-card p {
+      text-align: center;
+      color: #777;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 12px;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .main-btn {
+      width: 100%;
+      border: none;
+      background: linear-gradient(90deg, #7b2cff, #ff2f8b);
+      color: white;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .switch-btn {
+      display: block;
+      margin: 15px auto 0;
+      border: none;
+      background: none;
+      color: #7b2cff;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .error {
+      color: #e53935;
+      text-align: center;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
     .welcome {
       background: white;
       padding: 20px;
@@ -72,8 +134,9 @@
 
     .actions {
       display: flex;
-      gap: 15px;
+      gap: 10px;
       padding: 15px;
+      flex-wrap: wrap;
     }
 
     button {
@@ -82,6 +145,13 @@
       padding: 10px 15px;
       border-radius: 12px;
       font-size: 16px;
+      cursor: pointer;
+    }
+
+    .logout {
+      margin-top: 10px;
+      background: #222;
+      color: white;
     }
 
     .bottom {
@@ -95,6 +165,10 @@
       padding: 15px;
       box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
     }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 
@@ -102,45 +176,389 @@
 
   <header>✨ NovaShot</header>
 
-  <div class="container">
+  <!-- LOGIN / SIGN UP -->
+  <div id="authScreen" class="container">
+
+    <div class="card auth-card">
+
+      <h2 id="authTitle">Login to NovaShot</h2>
+
+      <p id="authSubtitle">
+        Welcome back! Login to continue.
+      </p>
+
+      <div id="nameBox" class="hidden">
+        <input
+          type="text"
+          id="name"
+          placeholder="Your name"
+        >
+      </div>
+
+      <input
+        type="email"
+        id="email"
+        placeholder="Email address"
+      >
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+      >
+
+      <button
+        class="main-btn"
+        onclick="handleAuth()"
+        id="authButton"
+      >
+        Login
+      </button>
+
+      <button
+        class="switch-btn"
+        onclick="toggleAuthMode()"
+        id="switchButton"
+      >
+        Create a new account
+      </button>
+
+      <div id="authMessage" class="error"></div>
+
+    </div>
+
+  </div>
+
+  <!-- MAIN NOVASHOT APP -->
+  <div id="appScreen" class="container hidden">
 
     <div class="welcome">
       <h2>Welcome to NovaShot</h2>
       <p>Share · Connect · Be You</p>
+
+      <br>
+
+      <p id="userEmail"></p>
+
+      <button class="logout" onclick="logout()">
+        Logout
+      </button>
     </div>
 
     <div class="post">
-      <div class="post-top">👤 NovaShot Creator</div>
+
+      <div class="post-top">
+        👤 NovaShot Creator
+      </div>
 
       <div class="post-image">
         NovaShot
       </div>
 
       <div class="actions">
-        <button onclick="likePost()">❤️ Like</button>
-        <button onclick="commentPost()">💬 Comment</button>
-        <button>↗️ Share</button>
+
+        <button onclick="likePost()">
+          ❤️ Like
+        </button>
+
+        <button onclick="commentPost()">
+          💬 Comment
+        </button>
+
+        <button onclick="sharePost()">
+          ↗️ Share
+        </button>
+
       </div>
+
     </div>
 
   </div>
 
-  <div class="bottom">
+  <!-- BOTTOM NAVIGATION -->
+
+  <div id="bottomNav" class="bottom hidden">
+
     <span>🏠 Home</span>
+
     <span>🔍 Search</span>
+
     <span>➕ Create</span>
+
     <span>👤 Profile</span>
+
   </div>
 
-  <script>
-    function likePost() {
-      alert("❤️ You liked this post!");
-    }
 
-    function commentPost() {
-      alert("💬 Comment feature coming soon!");
+  <!-- FIREBASE -->
+
+  <script type="module">
+
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut,
+      updateProfile
     }
+    from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyCqEzKueoaDGJN6qxR_YRE49Hr0qqMa7G0",
+
+      authDomain: "novashot-d2d9b.firebaseapp.com",
+
+      projectId: "novashot-d2d9b",
+
+      storageBucket: "novashot-d2d9b.firebasestorage.app",
+
+      messagingSenderId: "1041060031501",
+
+      appId: "1:1041060031501:web:b40f491c3af5e41e283944"
+
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+
+    const auth = getAuth(app);
+
+
+    let signupMode = false;
+
+
+    window.toggleAuthMode = function () {
+
+      signupMode = !signupMode;
+
+      const title = document.getElementById("authTitle");
+      const subtitle = document.getElementById("authSubtitle");
+      const button = document.getElementById("authButton");
+      const switchButton = document.getElementById("switchButton");
+      const nameBox = document.getElementById("nameBox");
+      const message = document.getElementById("authMessage");
+
+      message.textContent = "";
+
+      if (signupMode) {
+
+        title.textContent = "Create NovaShot Account";
+
+        subtitle.textContent =
+          "Create your account to join NovaShot.";
+
+        button.textContent = "Sign Up";
+
+        switchButton.textContent =
+          "Already have an account? Login";
+
+        nameBox.classList.remove("hidden");
+
+      } else {
+
+        title.textContent = "Login to NovaShot";
+
+        subtitle.textContent =
+          "Welcome back! Login to continue.";
+
+        button.textContent = "Login";
+
+        switchButton.textContent =
+          "Create a new account";
+
+        nameBox.classList.add("hidden");
+
+      }
+
+    };
+
+
+    window.handleAuth = async function () {
+
+      const name =
+        document.getElementById("name").value.trim();
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const password =
+        document.getElementById("password").value;
+
+      const message =
+        document.getElementById("authMessage");
+
+
+      message.textContent = "";
+
+
+      if (!email || !password) {
+
+        message.textContent =
+          "Please enter email and password.";
+
+        return;
+
+      }
+
+
+      if (signupMode && !name) {
+
+        message.textContent =
+          "Please enter your name.";
+
+        return;
+
+      }
+
+
+      try {
+
+        if (signupMode) {
+
+          const result =
+            await createUserWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+
+
+          await updateProfile(
+            result.user,
+            {
+              displayName: name
+            }
+          );
+
+
+          message.style.color = "green";
+
+          message.textContent =
+            "Account created successfully!";
+
+        } else {
+
+          await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+        }
+
+      } catch (error) {
+
+        message.style.color = "#e53935";
+
+        if (error.code === "auth/email-already-in-use") {
+
+          message.textContent =
+            "This email already has an account.";
+
+        } else if (error.code === "auth/invalid-email") {
+
+          message.textContent =
+            "Please enter a valid email.";
+
+        } else if (
+          error.code === "auth/weak-password"
+        ) {
+
+          message.textContent =
+            "Password should be at least 6 characters.";
+
+        } else if (
+          error.code === "auth/invalid-credential"
+        ) {
+
+          message.textContent =
+            "Email or password is incorrect.";
+
+        } else {
+
+          message.textContent =
+            error.message;
+
+        }
+
+      }
+
+    };
+
+
+    window.logout = async function () {
+
+      await signOut(auth);
+
+    };
+
+
+    window.likePost = function () {
+
+      alert("❤️ You liked this post!");
+
+    };
+
+
+    window.commentPost = function () {
+
+      alert("💬 Comment feature coming soon!");
+
+    };
+
+
+    window.sharePost = function () {
+
+      alert("↗️ Share feature coming soon!");
+
+    };
+
+
+    onAuthStateChanged(auth, function(user) {
+
+      const authScreen =
+        document.getElementById("authScreen");
+
+      const appScreen =
+        document.getElementById("appScreen");
+
+      const bottomNav =
+        document.getElementById("bottomNav");
+
+      const userEmail =
+        document.getElementById("userEmail");
+
+
+      if (user) {
+
+        authScreen.classList.add("hidden");
+
+        appScreen.classList.remove("hidden");
+
+        bottomNav.classList.remove("hidden");
+
+        userEmail.textContent =
+          "Logged in as: " + user.email;
+
+      } else {
+
+        authScreen.classList.remove("hidden");
+
+        appScreen.classList.add("hidden");
+
+        bottomNav.classList.add("hidden");
+
+      }
+
+    });
+
   </script>
 
 </body>
-  </html>
+        </html>
