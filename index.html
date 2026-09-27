@@ -384,9 +384,11 @@
       ➕ Create
     </span>
 
-    <span>
-      👤 Profile
-    </span>
+    <button onclick="openProfile()">
+  👤 Profile
+    </button>
+    
+
 
   </div>
 
@@ -734,7 +736,11 @@ from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
     };
 
 
+    /* PROFILE */
 
+window.openProfile = function() {
+  alert("👤 Profile page coming next!");
+};
     /* LOGOUT */
 
     window.logout = async function() {
