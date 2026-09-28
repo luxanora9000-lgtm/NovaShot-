@@ -388,7 +388,7 @@
     <h2 id="profileName">NovaShot User</h2>
 
     <p id="profileEmail" style="color:#777;margin-top:8px;"></p>
-
+    <p id="profileBio" style="color:#555;margin-top:12px;"></p>
     <p style="margin-top:15px;">
       Share · Connect · Be You
     </p>
@@ -817,7 +817,9 @@ window.openProfile = function() {
     document.getElementById("profileEmail")
       .textContent =
       user.email || "";
-
+   document.getElementById("profileBio")
+  .textContent =
+  "Bio: " + (user.bio || "");
   }
 
 };
