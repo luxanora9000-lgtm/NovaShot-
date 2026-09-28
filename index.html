@@ -821,8 +821,74 @@ window.openProfile = function() {
   }
 
 };
-  
+ window.editProfile = function() {
 
+  const user = auth.currentUser;
+
+  if (!user) {
+    return;
+  }
+
+  document.getElementById("editProfileBox")
+    .classList.remove("hidden");
+
+  document.getElementById("editName")
+    .value = user.displayName || "";
+
+}; 
+  window.saveProfileChanges = async function() {
+
+  const user = auth.currentUser;
+
+  if (!user) {
+    return;
+  }
+
+  const newName =
+    document.getElementById("editName")
+      .value.trim();
+
+  const newBio =
+    document.getElementById("editBio")
+      .value.trim();
+
+  if (!newName) {
+    alert("Please enter your name.");
+    return;
+  }
+
+  try {
+
+    await updateProfile(user, {
+      displayName: newName
+    });
+
+    await setDoc(
+      doc(db, "users", user.uid),
+      {
+        name: newName,
+        bio: newBio
+      },
+      {
+        merge: true
+      }
+    );
+
+    document.getElementById("profileName")
+      .textContent = newName;
+
+    alert("✅ Profile updated successfully!");
+
+  } catch (error) {
+
+    alert(
+      "Profile update failed: " +
+      error.message
+    );
+
+  }
+
+};
     /* LOGOUT */
 
     window.logout = async function() {
