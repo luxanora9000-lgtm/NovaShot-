@@ -480,6 +480,7 @@ import {
   getFirestore,
   doc,
   setDoc
+  getDoc
 }
 from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
@@ -798,7 +799,7 @@ from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
     /* PROFILE */
 
-window.openProfile = function() {
+window.openProfile = async function() {
 
   document.getElementById("appScreen")
     .classList.add("hidden");
@@ -809,7 +810,19 @@ window.openProfile = function() {
   const user = auth.currentUser;
 
   if (user) {
+  const profileDoc = await getDoc(
+  doc(db, "users", user.uid)
+);
 
+if (profileDoc.exists()) {
+
+  const profileData = profileDoc.data();
+
+  document.getElementById("profileBio")
+    .textContent =
+    "Bio: " + (profileData.bio || "");
+
+    }
     document.getElementById("profileName")
       .textContent =
       user.displayName || "NovaShot User";
