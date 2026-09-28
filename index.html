@@ -364,7 +364,46 @@
 
   </div>
 
+  <!-- PROFILE SCREEN -->
 
+<div id="profileScreen" class="container hidden">
+
+  <div class="card" style="text-align:center;">
+
+    <div style="
+      width:90px;
+      height:90px;
+      margin:0 auto 15px;
+      border-radius:50%;
+      background:linear-gradient(135deg,#7b2cff,#ff2f8b);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:white;
+      font-size:40px;
+    ">
+      👤
+    </div>
+
+    <h2 id="profileName">NovaShot User</h2>
+
+    <p id="profileEmail" style="color:#777;margin-top:8px;"></p>
+
+    <p style="margin-top:15px;">
+      Share · Connect · Be You
+    </p>
+
+    <button
+      class="main-btn"
+      style="margin-top:20px;"
+      onclick="editProfile()"
+    >
+      ✏️ Edit Profile
+    </button>
+
+  </div>
+
+</div>
   <!-- BOTTOM NAVIGATION -->
 
   <div
@@ -739,8 +778,30 @@ from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
     /* PROFILE */
 
 window.openProfile = function() {
-  alert("👤 Profile page coming next!");
+
+  document.getElementById("appScreen")
+    .classList.add("hidden");
+
+  document.getElementById("profileScreen")
+    .classList.remove("hidden");
+
+  const user = auth.currentUser;
+
+  if (user) {
+
+    document.getElementById("profileName")
+      .textContent =
+      user.displayName || "NovaShot User";
+
+    document.getElementById("profileEmail")
+      .textContent =
+      user.email || "";
+
+  }
+
 };
+  
+
     /* LOGOUT */
 
     window.logout = async function() {
