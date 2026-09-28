@@ -479,7 +479,7 @@ signInWithPopup
 import {
   getFirestore,
   doc,
-  setDoc
+  setDoc,
   getDoc
 }
 from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
@@ -830,9 +830,9 @@ if (profileDoc.exists()) {
     document.getElementById("profileEmail")
       .textContent =
       user.email || "";
-   document.getElementById("profileBio")
-  .textContent =
-  "Bio: " + (user.bio || "");
+  
+  
+  
   }
 
 };
