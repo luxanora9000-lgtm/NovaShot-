@@ -346,9 +346,11 @@
 
       <div class="actions">
 
-        <button onclick="likePost()">
-          ❤️ Like
+        <button onclick="likePost(this)">
+  🤍 Like
         </button>
+          
+        
 
         <button onclick="commentPost()">
           💬 Comment
@@ -1107,9 +1109,23 @@ if (profileDoc.exists()) {
 
 
    
-  window.likePost = function() {
-  alert("❤️ You liked this post!");
-};
+ window.likePost = function(button) {
+
+  if (button.dataset.liked === "true") {
+
+    button.dataset.liked = "false";
+    button.innerHTML = "🤍 Like";
+
+  } else {
+
+    button.dataset.liked = "true";
+    button.innerHTML = "❤️ Liked";
+
+  }
+
+}; 
+  
+
   </script>
 
 </body>
