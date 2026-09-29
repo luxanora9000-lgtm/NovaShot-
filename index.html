@@ -1037,13 +1037,75 @@ if (profileDoc.exists()) {
   input.onchange = function(event) {
     const file = event.target.files[0];
 
-    if (file) {
-      alert("📸 Photo selected: " + file.name);
+    if (!file) {
+      return;
     }
+
+    const imageURL = URL.createObjectURL(file);
+
+    const caption = prompt(
+      "Write a caption for your post:"
+    );
+
+    if (caption === null) {
+      return;
+    }
+
+    const post = document.createElement("div");
+
+    post.className = "card";
+
+    post.style.marginTop = "20px";
+
+    post.innerHTML = `
+      <img
+        src="${imageURL}"
+        style="
+          width:100%;
+          border-radius:15px;
+          display:block;
+        "
+      >
+
+      <p style="margin-top:12px;">
+        ${caption}
+      </p>
+
+      <div style="
+        display:flex;
+        gap:20px;
+        margin-top:15px;
+        font-size:18px;
+      ">
+        ❤️ Like
+        💬 Comment
+        ↗️ Share
+      </div>
+    `;
+
+    const appScreen =
+      document.getElementById("appScreen");
+
+    appScreen.appendChild(post);
   };
 
   input.click();
 };
+  
+
+  
+
+
+  
+    
+
+    
+    
+    
+  
+
+
+
    
 
   </script>
