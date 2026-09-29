@@ -348,7 +348,11 @@
 
         <button onclick="likePost(this)">
   🤍 Like
-        </button>
+</button>
+
+<span class="likeCount">0 Likes</span>
+          
+      
           
         
 
@@ -1111,19 +1115,47 @@ if (profileDoc.exists()) {
    
  window.likePost = function(button) {
 
+  const countText =
+    button.parentElement.querySelector(".likeCount");
+
+  let count = parseInt(
+    countText.textContent
+  ) || 0;
+
   if (button.dataset.liked === "true") {
 
     button.dataset.liked = "false";
     button.innerHTML = "🤍 Like";
+
+    count--;
 
   } else {
 
     button.dataset.liked = "true";
     button.innerHTML = "❤️ Liked";
 
+    count++;
+
   }
 
-}; 
+  countText.textContent =
+    count + (count === 1 ? " Like" : " Likes");
+
+};
+
+  
+
+    
+    
+
+  
+
+    
+    
+
+  
+
+
   
 
   </script>
