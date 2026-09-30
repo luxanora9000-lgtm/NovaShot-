@@ -940,17 +940,7 @@ if (profileDoc.exists()) {
 
     /* COMMENT */
 
-    window.commentPost = function() {
-
-  const comment = prompt(
-    "💬 Write your comment:"
-  );
-
-  if (comment === null) {
-    return;
-  }
-
-  window.commentPost = function(button) {
+window.commentPost = function(button) {
 
   const comment = prompt(
     "💬 Write your comment:"
@@ -966,25 +956,46 @@ if (profileDoc.exists()) {
   }
 
   const commentBox =
-    button.parentElement.parentElement.querySelector(".comments");
+    button.parentElement.querySelector(".comments");
 
   const newComment =
     document.createElement("p");
 
-  newComment.innerHTML =
+  newComment.textContent =
     "💬 " + comment;
 
   commentBox.appendChild(newComment);
 
 };
+
     
-    
+
+
+  
+
+
+  
+
+
+
+  
+
   
 
   
     
   
 
+
+    
+    
+
+
+  
+    
+
+  
+  
 
 
 
