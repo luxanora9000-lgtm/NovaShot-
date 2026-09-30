@@ -1220,7 +1220,22 @@ window.commentPost = function(button) {
 
 
   
+window.toggleFollow = function() {
 
+  const button =
+    document.getElementById("followButton");
+
+  if (button.textContent.includes("Follow")) {
+
+    button.textContent = "✓ Following";
+
+  } else {
+
+    button.textContent = "➕ Follow";
+
+  }
+
+};
   </script>
 
 </body>
