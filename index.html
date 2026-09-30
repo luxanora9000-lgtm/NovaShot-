@@ -938,11 +938,29 @@ if (profileDoc.exists()) {
 
     window.commentPost = function() {
 
-      alert(
-        "💬 Comment feature coming soon!"
-      );
+  const comment = prompt(
+    "💬 Write your comment:"
+  );
 
-    };
+  if (comment === null) {
+    return;
+  }
+
+  if (comment.trim() === "") {
+    alert("Please write a comment.");
+    return;
+  }
+
+  alert(
+    "💬 Your comment: " + comment
+  );
+
+};
+
+      
+      
+
+    
 
 
 
