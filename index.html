@@ -356,9 +356,13 @@
           
         
 
-        <button onclick="commentPost()">
-          💬 Comment
-        </button>
+        <button onclick="commentPost(this)">
+  💬 Comment
+</button>
+
+<div class="comments"></div>
+          
+        
 
         <button onclick="sharePost()">
           ↗️ Share
@@ -946,21 +950,43 @@ if (profileDoc.exists()) {
     return;
   }
 
+  window.commentPost = function(button) {
+
+  const comment = prompt(
+    "💬 Write your comment:"
+  );
+
+  if (comment === null) {
+    return;
+  }
+
   if (comment.trim() === "") {
     alert("Please write a comment.");
     return;
   }
 
-  alert(
-    "💬 Your comment: " + comment
-  );
+  const commentBox =
+    button.parentElement.parentElement.querySelector(".comments");
+
+  const newComment =
+    document.createElement("p");
+
+  newComment.innerHTML =
+    "💬 " + comment;
+
+  commentBox.appendChild(newComment);
 
 };
-
-      
-      
-
     
+    
+  
+
+  
+    
+  
+
+
+
 
 
 
